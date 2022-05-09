@@ -1,4 +1,8 @@
 import cv2
+<<<<<<< HEAD
+=======
+import numpy as np
+>>>>>>> e1627cc3407f43b49e2b83c12a8479bd1f8438fa
 import pathlib
 import threading
 #C:\coding\face\database\trainer\trainer.yml

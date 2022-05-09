@@ -6,6 +6,24 @@ from detectme.camera import FaceDetect
 def home(request):
     return render(request, 'home.html')
 
+<<<<<<< HEAD
+=======
+# class VideoCamera(object):
+#     def __init__(self):
+#         self.video = cv2.VideoCapture(0)
+#         (self.grabbed, self.frame) = self.video.read()
+#         threading.Thread(target=self.update, args=()).start()
+
+#     def get_frame(self):
+#         image = self.frame
+#         _, jpeg = cv2.imencode('.jpg', image)
+#         return jpeg.tobytes()
+    
+#     def update(self):
+#         while True:
+#             (self.grabbed, self.frame) = self.video.read()
+            
+>>>>>>> e1627cc3407f43b49e2b83c12a8479bd1f8438fa
 def gen(camera):
     while True:
         frame = camera.get_frame()
