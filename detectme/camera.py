@@ -1,23 +1,24 @@
 import cv2
-<<<<<<< HEAD
-=======
-import numpy as np
->>>>>>> e1627cc3407f43b49e2b83c12a8479bd1f8438fa
-import pathlib
 import threading
+import pathlib
+import os
 #C:\coding\face\database\trainer\trainer.yml
+Face_Images = os.path.join(os.getcwd(), "dataset/lib")
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read('C:\coding/face/database/trainer/trainer.yml')
-cascadePath = "C:\coding\opencv-4.5.5\data\haarcascades\haarcascade_frontalface_default.xml"
+recognizer.read('C:\coding/face2\dataset/train/face-trainner.yml')
+cascadePath = "C:\coding/face2\dataset\lib\haarcascade_frontalface_default.xml"
 
 faceCascade = cv2.CascadeClassifier(cascadePath);
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-names = []
+# names = []
 #C:\coding\face\database\face_resize
-path = 'C:\coding/face\database/face_resize'
-for path in pathlib.Path(path).iterdir():
-    names.append(path.name.split(".")[0].split("_")[0])
+# path = 'C:\coding/face\databset/face_img'
+# for path in pathlib.Path(path).iterdir():
+#     names.append(path.name.split(".")[0].split("_")[0])
+
+Face_Images = os.path.join(os.getcwd(), "dataset//face_img")
+names = os.listdir(Face_Images)
 
 class FaceDetect(object):
     def __init__(self):

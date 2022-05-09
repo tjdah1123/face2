@@ -11,7 +11,7 @@ pev_person_name = ""
 y_ID = []
 x_train = []
 
-Face_Images = os.path.join(os.getcwd(), "face2/dataset/face_resize") #이미지 폴더 지정
+Face_Images = os.path.join(os.getcwd(), "face2/dataset/face_img") #이미지 폴더 지정
 print(Face_Images)
 
 for root, dirs, files in os.walk(Face_Images) : #파일 목록 가져오기
