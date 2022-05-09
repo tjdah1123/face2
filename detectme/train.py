@@ -1,32 +1,40 @@
 import cv2
 import numpy as np
-from PIL import Image
 import os
+from PIL import Image
+ 
+face_cascade = cv2.CascadeClassifier('face2/dataset/lib/haarcascade_frontalface_default.xml')
+recognizer = cv2.face.LBPHFaceRecognizer_create() #LBPH를 사용할 새 변수 생성
 
-# Path for face image database
-path = 'dataset'
-recognizer = cv2.face.LBPHFaceRecognizer_create()
-detector = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml");
+Face_ID = -1 
+pev_person_name = ""
+y_ID = []
+x_train = []
 
-# function to get the images and label data
-def getImagesAndLabels(path):
-    imagePaths = [os.path.join(path,f) for f in os.listdir(path)]     
-    faceSamples=[]
-    ids = []
-    for imagePath in imagePaths:
-        PIL_img = Image.open(imagePath).convert('L') # convert it to grayscale
-        img_numpy = np.array(PIL_img,'uint8')
-        id = int(os.path.split(imagePath)[-1].split(".")[1])
-        faces = detector.detectMultiScale(img_numpy)
-        for (x,y,w,h) in faces:
-            faceSamples.append(img_numpy[y:y+h,x:x+w])
-            ids.append(id)
-    return faceSamples,ids
-print ("\n [INFO] Training faces. It will take a few seconds. Wait ...")
-faces,ids = getImagesAndLabels(path)
-recognizer.train(faces, np.array(ids))
+Face_Images = os.path.join(os.getcwd(), "face2/dataset/face_resize") #이미지 폴더 지정
+print(Face_Images)
 
-# Save the model into trainer/trainer.yml
-recognizer.write('trainer/trainer.yml') # recognizer.save() worked on Mac, but not on Pi
-# Print the numer of faces trained and end program
-print("\n [INFO] {0} faces trained. Exiting Program".format(len(np.unique(ids))))
+for root, dirs, files in os.walk(Face_Images) : #파일 목록 가져오기
+    for file in files :
+        if file.endswith("jpeg") or file.endswith("jpg") or file.endswith("png") : #이미지 파일 필터링
+            path = os.path.join(root, file)
+            person_name = os.path.basename(root)
+            print(path, person_name)
+ 
+            if pev_person_name != person_name : #이름이 바뀌었는지 확인
+                Face_ID=Face_ID+1
+                pev_person_name = person_name
+            
+            img = cv2.imread(path) #이미지 파일 가져오기
+            gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.3, minNeighbors=5) #얼굴 찾기
+
+            print (Face_ID, faces)
+            
+            for (x,y,w,h) in faces:
+                roi = gray_image[y:y+h, x:x+w] #얼굴부분만 가져오기
+                x_train.append(roi)
+                y_ID.append(Face_ID)
+ 
+                recognizer.train(x_train, np.array(y_ID)) #matrix 만들기
+                recognizer.save("face2/dataset/train/face-trainner.yml") #저장하기
