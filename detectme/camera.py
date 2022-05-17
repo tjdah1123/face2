@@ -2,20 +2,19 @@ import cv2
 import threading
 import pathlib
 import os
-#C:\coding\face\database\trainer\trainer.yml
+import time
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision
+from torchvision import datasets, models, transforms
+
 Face_Images = os.path.join(os.getcwd(), "dataset/lib")
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('C:\coding/face2\dataset/train/face-trainner.yml')
 cascadePath = "C:\coding/face2\dataset\lib\haarcascade_frontalface_default.xml"
-
 faceCascade = cv2.CascadeClassifier(cascadePath);
 font = cv2.FONT_HERSHEY_SIMPLEX
-
-# names = []
-#C:\coding\face\database\face_resize
-# path = 'C:\coding/face\databset/face_img'
-# for path in pathlib.Path(path).iterdir():
-#     names.append(path.name.split(".")[0].split("_")[0])
 
 Face_Images = os.path.join(os.getcwd(), "dataset//face_img")
 names = os.listdir(Face_Images)
@@ -31,11 +30,9 @@ class FaceDetect(object):
         id = 0
         minW = 0.1*self.video.get(3)
         minH = 0.1*self.video.get(4)
-
-
+        
         while True:
             img = self.frame
-            #img = cv2.flip(img, -1) # Flip vertically
             gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
             faces = faceCascade.detectMultiScale( 
                 gray,
@@ -43,10 +40,9 @@ class FaceDetect(object):
                 minNeighbors = 5,
                 minSize = (int(minW), int(minH)),
             )
-
+            
             for(x,y,w,h) in faces:
                 cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
-                
                 id, confidence = recognizer.predict(gray[y:y+h,x:x+w])
                 # Check if confidence is less them 100 ==> "0" is perfect match
                 if (confidence < 100):
@@ -64,6 +60,7 @@ class FaceDetect(object):
                 
             ret, jpeg = cv2.imencode('.jpg', img)
             return jpeg.tobytes()
+        
         
     def update(self):
         while True:

@@ -35,6 +35,8 @@ for root, dirs, files in os.walk(Face_Images) : #파일 목록 가져오기
                 roi = gray_image[y:y+h, x:x+w] #얼굴부분만 가져오기
                 x_train.append(roi)
                 y_ID.append(Face_ID)
- 
-                recognizer.train(x_train, np.array(y_ID)) #matrix 만들기
-                recognizer.save("face2/dataset/train/face-trainner.yml") #저장하기
+
+                print(len(x_train))
+                break
+                # recognizer.train(x_train, np.array(y_ID)) #matrix 만들기
+                # recognizer.save("face2/dataset/train/face-trainner.yml") #저장하기
