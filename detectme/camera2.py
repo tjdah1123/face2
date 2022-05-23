@@ -8,8 +8,6 @@ import os
 import time
 
 font = cv2.FONT_HERSHEY_SIMPLEX
-Face_Images = os.path.join(os.getcwd(), "dataset//face_img")
-names = os.listdir(Face_Images)
 mtcnn0 = MTCNN(image_size=240, margin=0, keep_all=False, min_face_size=40) # keep_all=False
 mtcnn = MTCNN(image_size=240, margin=0, keep_all=True, min_face_size=40) # keep_all=True
 resnet = InceptionResnetV1(pretrained='vggface2').eval()
