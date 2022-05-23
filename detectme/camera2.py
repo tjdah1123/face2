@@ -58,7 +58,7 @@ class FaceDetect(object):
                         
             ret, jpeg = cv2.imencode('.jpg', frame)
             return jpeg.tobytes()
-        
+         
     def update(self):
         while True:
             (self.grabbed, self.frame) = self.video.read()
